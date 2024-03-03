@@ -7,7 +7,7 @@ name: Selenium
 on:
   push:
     branches:
-      - main
+      - dev
 
 jobs:
   scrape:

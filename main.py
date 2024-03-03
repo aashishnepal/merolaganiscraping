@@ -8,7 +8,7 @@ import time
 import csv
 
 
-import pandas as pd
+# import pandas as pd
 
 url='https://merolagani.com/'
 driver = webdriver.Chrome()
