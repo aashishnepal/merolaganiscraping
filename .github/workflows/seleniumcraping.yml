@@ -1,4 +1,4 @@
-name: Selenium
+name: run main.py
 
 # on:
 #   schedule:
@@ -24,6 +24,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          sudo snap install chromium
           pip install selenium beautifulsoup4
 
       - name: Run Selenium crawler
