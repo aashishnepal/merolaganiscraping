@@ -22,12 +22,15 @@ jobs:
         with:
           python-version: '3.11.8'
 
-      - name: Install dependencies
+      - name: Install dependencies and configure ChromeDriver
         run: |
-          sudo snap install chromium
           pip install selenium beautifulsoup4
+          wget https://chromedriver.storage.googleapis.com/$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip
+          unzip chromedriver_linux64.zip -d /tmp
+          mv /tmp/chromedriver /usr/local/bin/chromedriver
+          chmod +x /usr/local/bin/chromedriver
 
-      - name: Run Selenium crawler
+      - name: Run Selenium script
         run: python main.py
 
       - name: Upload CSV artifact
