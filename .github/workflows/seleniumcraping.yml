@@ -22,13 +22,15 @@ jobs:
         with:
           python-version: '3.11.8'
 
+      - name: Removing previous chrome instances on runner 
+        run: sudo apt purge google-chrome-stable 
+    
       - name: Install dependencies and configure ChromeDriver
-        run: |
-          pip install selenium beautifulsoup4
-          wget https://chromedriver.storage.googleapis.com/$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip
-          unzip chromedriver_linux64.zip -d /tmp
-          mv /tmp/chromedriver /usr/local/bin/chromedriver
-          chmod +x /usr/local/bin/chromedriver
+        run: pip install chromedriver-autoinstaller selenium pyvirtualdisplay beautifulsoup4
+          # wget https://chromedriver.storage.googleapis.com/$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip
+          # unzip chromedriver_linux64.zip -d /tmp
+          # mv /tmp/chromedriver /usr/local/bin/chromedriver
+          # chmod +x /usr/local/bin/chromedriver
 
       - name: Run Selenium script
         run: python main.py
