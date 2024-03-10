@@ -3,6 +3,8 @@ from selenium.webdriver.common.by import By
 from selenium. webdriver.common.keys import Keys
 from selenium.webdriver. support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.chrome.options import Options
+
 from bs4 import BeautifulSoup
 # import chromedriver_autoinstaller
 
@@ -10,10 +12,10 @@ import time
 import csv
 
 # chromedriver_autoinstaller.install() 
-driver = webdriver.ChromeOptions()
+options = webdriver.ChromeOptions()
 
 url='https://merolagani.com/'
-# driver = webdriver.Chrome()
+driver = webdriver.Chrome(options=options)
 driver.get(url)
 
 wait=WebDriverWait(driver,10)
