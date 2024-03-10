@@ -4,12 +4,16 @@ from selenium. webdriver.common.keys import Keys
 from selenium.webdriver. support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from bs4 import BeautifulSoup
+# import chromedriver_autoinstaller
+
 import time
 import csv
 
+# chromedriver_autoinstaller.install() 
+driver = webdriver.ChromeOptions()
 
 url='https://merolagani.com/'
-driver = webdriver.Chrome()
+# driver = webdriver.Chrome()
 driver.get(url)
 
 wait=WebDriverWait(driver,10)
