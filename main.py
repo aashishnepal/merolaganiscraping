@@ -8,21 +8,20 @@ from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 import chromedriver_autoinstaller
 
-import time
-import csv
 
  
 chromedriver_autoinstaller.install() 
                                    
 
 options = webdriver.ChromeOptions()
-options.add_argument('--headless')
-options.add_argument('--enable-javascript')  
-options.add_argument('blink-settings=imagesEnabled=false')     
-options.add_argument('--no-sandbox')               
-options.add_argument('--disable-gpu')              
-options.add_argument('--hide-scrollbars')          
-options.add_argument("--headless")  
+
+# options.add_argument('--headless')
+# options.add_argument('--enable-javascript')  
+# options.add_argument('blink-settings=imagesEnabled=false')     
+# options.add_argument('--no-sandbox')               
+# options.add_argument('--disable-gpu')              
+# options.add_argument('--hide-scrollbars')          
+# options.add_argument("--headless")  
 
 url='https://merolagani.com/'
 driver = webdriver.Chrome(options=options)
@@ -67,19 +66,19 @@ def floor_sheet():
 # Extracting data from web
 def data_extract_save(pages):
    path_table='//*[@id="ctl00_ContentPlaceHolder1_CompanyDetail1_divDataFloorsheet"]/div[2]/table/tbody'
+   next_button='//*[@id="ctl00_ContentPlaceHolder1_CompanyDetail1_divDataFloorsheet"]/div[1]/div[2]/a[6]'
    tbody =wait.until(lambda x: x.find_element(By.XPATH,path_table))
    data = []
    
 
 # Pagination data extraction
    for page in range(5):
-    # driver.implicitly_wait(10)
-
-    # tbody= WebDriverWait(driver, 40).until(EC.visibility_of_element_located((By.XPATH, path_table)))
+    driver.implicitly_wait(10)
+    tbody= WebDriverWait(driver, 20).until(EC.invisibility_of_element_located((By.XPATH, path_table)))
     rows = tbody.find_elements(By.XPATH,'//tr')
     for row in rows:
        data.append(row.text)
-  #  wait.until(EC.presence_of_element_located((By.XPATH, '//a[contains(@onclick, "changePageIndex") and contains(@title, "Next Page")]'))).click()
+    wait.until(EC.presence_of_element_located((By.XPATH, next_button))).click()
  
    data_index= int(data.index("# Date Transact. No. Buyer Seller Qty. Rate Amount"))
  
