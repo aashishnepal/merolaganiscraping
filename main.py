@@ -11,6 +11,7 @@ import chromedriver_autoinstaller
 import time
 import csv
 
+ 
 chromedriver_autoinstaller.install() 
                                    
 
@@ -27,7 +28,7 @@ url='https://merolagani.com/'
 driver = webdriver.Chrome(options=options)
 driver.get(url)
 
-wait=WebDriverWait(driver,10)
+wait=WebDriverWait(driver,20)
 
 # Searching required Script
 def search(ticker):
@@ -82,44 +83,23 @@ def data_extract_save(pages):
  
    data_index= int(data.index("# Date Transact. No. Buyer Seller Qty. Rate Amount"))
  
-# Save to CSV
-  #  selected_data=process_data(data)
-   start_index=data_index
-   skip_interval=data_index+1
-   selected_data=[]   
-   data_to_store = 100
-   for i in range(len(data)):
-    # Skip indices before the 35th index
-    if i < start_index:
-        continue
-
-    # Store data after the 35th index
-    selected_data.append(data[i])
-
-    # If 100 data points are stored, skip the next 35 indices
-    if len(selected_data) == data_to_store:
-        start_index = i + skip_interval
-
-
+#   Save to CSV
+   skip_count = 36
+   selected_data = data[skip_count : skip_count + 100]
+   chunk_size = 100
+   all_selected_data = []
+   while skip_count < len(data):
+       selected_data = data[skip_count : skip_count + chunk_size]
+       all_selected_data.extend(selected_data)
+       skip_count += chunk_size + 36
+   
    with open("hdlscrapdata.csv", "w", newline="") as csvfile:
     csvfile.write(data[data_index]+'\n') 
-    for i in range(len(selected_data)):
-      csvfile.write(selected_data[i]+'\n')      
+    for i in range(len(all_selected_data)):
+      csvfile.write(all_selected_data[i]+'\n')      
 
 
-# def process_data(data_list):
-#     skip_interval = 35
-#     batch_size = 100
 
-#     # Iterate through the data list
-#     for i in range(skip_interval, len(data_list), batch_size + skip_interval):
-#         # Extract the batch of 100 elements after skipping 35 indices
-#         batch_data = data_list[i:i + batch_size]
-#         return batch_data
-#         # Process or store the batch_data as needed
-#         print(f"Processing data from index {i + 1} to {i + batch_size}:", batch_data)
-
- 
 
 
 if __name__ == "__main__":
@@ -130,12 +110,3 @@ if __name__ == "__main__":
 
 
 
-#loop for pages
-#extract data 
-#next page
-#extract data
-#reach last page
-#save data to csv
-#
-#
-#
