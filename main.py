@@ -15,13 +15,13 @@ chromedriver_autoinstaller.install()
 
 options = webdriver.ChromeOptions()
 
-# options.add_argument('--headless')
-# options.add_argument('--enable-javascript')  
-# options.add_argument('blink-settings=imagesEnabled=false')     
-# options.add_argument('--no-sandbox')               
-# options.add_argument('--disable-gpu')              
-# options.add_argument('--hide-scrollbars')          
-# options.add_argument("--headless")  
+options.add_argument('--headless')
+options.add_argument('--enable-javascript')  
+options.add_argument('blink-settings=imagesEnabled=false')     
+options.add_argument('--no-sandbox')               
+options.add_argument('--disable-gpu')              
+options.add_argument('--hide-scrollbars')          
+options.add_argument("--headless")  
 
 url='https://merolagani.com/'
 driver = webdriver.Chrome(options=options)
