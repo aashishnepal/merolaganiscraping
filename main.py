@@ -8,8 +8,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException,ElementNotVisibleException,ElementNotSelectableException
 from bs4 import BeautifulSoup
 import chromedriver_autoinstaller
-import pandas as pd
-
+ 
 
  
 chromedriver_autoinstaller.install() 
