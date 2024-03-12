@@ -4,9 +4,11 @@ from selenium. webdriver.common.keys import Keys
 from selenium.webdriver. support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
-
+from selenium.common.exceptions import NoSuchElementException        
+from selenium.common.exceptions import TimeoutException,ElementNotVisibleException,ElementNotSelectableException
 from bs4 import BeautifulSoup
 import chromedriver_autoinstaller
+import pandas as pd
 
 
  
@@ -28,6 +30,14 @@ driver = webdriver.Chrome(options=options)
 driver.get(url)
 
 wait=WebDriverWait(driver,20)
+
+def fluent_wait(xpathid):
+    try:
+        element = WebDriverWait(driver, 20, poll_frequency=1, ignored_exceptions=[ElementNotVisibleException, ElementNotSelectableException]).until(
+            EC.presence_of_element_located((By.XPATH, xpathid)))
+    except TimeoutException:
+        print("Element not found")
+    return element
 
 # Searching required Script
 def search(ticker):
@@ -57,7 +67,7 @@ def floor_sheet():
  else:
   total_pages=1
  
- print('*-*-*-* pages')
+#  print('*-*-*-* pages')
  print(f'Total pages: {total_pages}')
 
  data_extract_save(5)
@@ -68,16 +78,20 @@ def data_extract_save(pages):
    path_table='//*[@id="ctl00_ContentPlaceHolder1_CompanyDetail1_divDataFloorsheet"]/div[2]/table/tbody'
    next_button='//*[@id="ctl00_ContentPlaceHolder1_CompanyDetail1_divDataFloorsheet"]/div[1]/div[2]/a[6]'
    tbody =wait.until(lambda x: x.find_element(By.XPATH,path_table))
-   data = []
+   data = []           
    
 
 # Pagination data extraction
    for page in range(5):
-    driver.implicitly_wait(20)
-    tbody= WebDriverWait(driver, 40).until(EC.presence_of_element_located((By.XPATH, path_table)))
+    driver.implicitly_wait(40)  
+    # driver.wa
+    # tbody= WebDriverWait(driver, 80).until(EC.invisibility_of_element_located((By.XPATH, path_table)))
+    tbody= fluent_wait(path_table)
+    # driver.switch_to.frame(tbody)
+
     rows = tbody.find_elements(By.XPATH,'//tr')
     for row in rows:
-       data.append(row.text)
+      data.append(row.text)
     wait.until(EC.presence_of_element_located((By.XPATH, next_button))).click()
  
    data_index= int(data.index("# Date Transact. No. Buyer Seller Qty. Rate Amount"))
@@ -104,8 +118,3 @@ def data_extract_save(pages):
 if __name__ == "__main__":
    search('hdl')
    driver.quit()
-
- 
-
-
-
