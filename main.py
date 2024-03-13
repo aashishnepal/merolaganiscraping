@@ -51,25 +51,28 @@ def search(ticker):
 # Locating FloorSheet Menu 
 def floor_sheet():  
  driver.implicitly_wait(5)
- floor_data = driver.find_element('id', 'ctl00_ContentPlaceHolder1_CompanyDetail1_lnkFloorsheetTab').click()
+ driver.find_element('id', 'ctl00_ContentPlaceHolder1_CompanyDetail1_lnkFloorsheetTab').click()
+ driver.implicitly_wait(10)
 
  pagination="ctl00_ContentPlaceHolder1_CompanyDetail1_PagerControlFloorsheet1_litRecords"
  
- element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, pagination)))
- total_pages=1
+ element = wait.until(EC.presence_of_element_located ((By.ID, pagination)))
+#  element = wait.until(EC.text_to_be_present_in_element (((By.ID, pagination),"Total pages: ")))
+ total_pages=10
 # Check if the element has text
- if element.text:
+#  print(element)
+ if element.text :
    soup = BeautifulSoup(element.get_attribute("outerHTML"), 'html.parser')
    total_pages_text = soup.find('span', {'id': pagination}).text
    total_pages = total_pages_text.split('[Total pages: ')[1].split(']')[0]
 
- else:
-  total_pages=1
+#  else:
+#   total_pages=1
  
 #  print('*-*-*-* pages')
- print(f'Total pages: {total_pages}')
+#  print(f'Total pages: {total_pages}')
 
- data_extract_save(5)
+ data_extract_save(total_pages)
 
 
 # Extracting data from web
@@ -82,17 +85,18 @@ def data_extract_save(pages):
    
 
 # Pagination data extraction
-   for page in range(5):
-    driver.implicitly_wait(40)  
+   for page in range(pages):
+    driver.implicitly_wait(20)  
     tbody= fluent_wait(path_table)
 
     rows = tbody.find_elements(By.XPATH,'//tr')
     for row in rows:
+      # row_data=row.text.split()
       data.append(row.text)
     wait.until(EC.presence_of_element_located((By.XPATH, next_button))).click()
     wait.until(EC.invisibility_of_element((By.XPATH, loading_element)))
  
-   data_index= int(data.index("# Date Transact. No. Buyer Seller Qty. Rate Amount"))
+  #  data_index= int(data.index("#"))
  
 #   Save to CSV
    skip_count = 36
@@ -103,11 +107,14 @@ def data_extract_save(pages):
        selected_data = data[skip_count : skip_count + chunk_size]
        all_selected_data.extend(selected_data)
        skip_count += chunk_size + 36
-   
+  #  titles=data[35].split()   
    with open("hdlscrapdata.csv", "w", newline="") as csvfile:
-    csvfile.write(data[data_index]+'\n') 
+    csvfile.writelines(data[35]) 
+    csvfile.write('\n')
     for i in range(len(all_selected_data)):
-      csvfile.write(all_selected_data[i]+'\n')      
+      csvfile.writelines (all_selected_data[i])
+      csvfile.write('\n')
+
 
 
 
