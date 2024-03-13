@@ -76,6 +76,7 @@ def floor_sheet():
 def data_extract_save(pages):
    path_table='//*[@id="ctl00_ContentPlaceHolder1_CompanyDetail1_divDataFloorsheet"]/div[2]/table/tbody'
    next_button='//*[@id="ctl00_ContentPlaceHolder1_CompanyDetail1_divDataFloorsheet"]/div[1]/div[2]/a[6]'
+   loading_element='//*[@id="processing"]'
    tbody =wait.until(lambda x: x.find_element(By.XPATH,path_table))
    data = []           
    
@@ -83,15 +84,13 @@ def data_extract_save(pages):
 # Pagination data extraction
    for page in range(5):
     driver.implicitly_wait(40)  
-    # driver.wa
-    # tbody= WebDriverWait(driver, 80).until(EC.invisibility_of_element_located((By.XPATH, path_table)))
     tbody= fluent_wait(path_table)
-    # driver.switch_to.frame(tbody)
 
     rows = tbody.find_elements(By.XPATH,'//tr')
     for row in rows:
       data.append(row.text)
     wait.until(EC.presence_of_element_located((By.XPATH, next_button))).click()
+    wait.until(EC.invisibility_of_element((By.XPATH, loading_element)))
  
    data_index= int(data.index("# Date Transact. No. Buyer Seller Qty. Rate Amount"))
  
