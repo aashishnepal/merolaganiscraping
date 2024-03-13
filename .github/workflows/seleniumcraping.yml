@@ -1,13 +1,13 @@
 name: run main.py
 
-on:
-  schedule:
-    - cron: '0 0 * * 1,4'
-
 # on:
-#   push:
-#     branches:
-#       - dev
+#   schedule:
+#     - cron: '0 0 * * 1,4'
+
+on:
+  push:
+    branches:
+      - dev
 
 jobs:
   scrape:
